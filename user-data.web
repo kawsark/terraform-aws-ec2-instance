@@ -1,0 +1,1 @@
+echo "user_data from Terraform" > /tmp/user_data.txt

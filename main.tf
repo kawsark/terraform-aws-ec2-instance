@@ -16,5 +16,7 @@ resource "aws_instance" "ubuntu" {
     owner = "${var.owner}"
     TTL = "${var.ttl}"
   }
+ 
+  user_data = "${file("user-data.web")}"
 
 }
