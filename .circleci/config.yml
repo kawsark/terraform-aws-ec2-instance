@@ -13,10 +13,10 @@ jobs:
           command: pwd && ls -l
       - run:
           name: download terraform
-          command: apt-get update -y && apt-get install wget -y && wget https://releases.hashicorp.com/terraform/0.11.8/terraform_0.11.8_linux_amd64.zip && unzip terraform_0.11.8_linux_amd64.zip && chmod +x terraform
+          command: apt-get update -y && apt-get install wget unzip -y && wget https://releases.hashicorp.com/terraform/0.11.8/terraform_0.11.8_linux_amd64.zip && unzip terraform_0.11.8_linux_amd64.zip && chmod +x terraform
       - run:
-          name: run terraform init
-          command: terraform init
+          name: Terraform init
+          command: ./terraform init
       - run:
-          name: run terraform plan
-          command: terraform init
+          name: Terraform plan
+          command: ./terraform init
