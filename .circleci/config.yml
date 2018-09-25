@@ -9,5 +9,11 @@ jobs:
           name: Greeting
           command: echo Hello, world.
       - run:
-          name: Print the Current Time
-          command: date
+          name: Print the Working directory
+          command: pwd && tree .
+      - run:
+          name: download terraform
+          command: wget https://releases.hashicorp.com/terraform/0.11.8/terraform_0.11.8_linux_amd64.zip && unzip terraform_0.11.8_linux_amd64.zip && chmod +x terraform
+      - run:
+          name: run terraform
+          command: terraform init
