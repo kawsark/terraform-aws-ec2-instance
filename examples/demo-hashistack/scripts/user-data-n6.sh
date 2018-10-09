@@ -18,7 +18,7 @@ nohup consul agent -config-file=consul-client.json -bind "192.168.0.15" \
 
 echo "Start Vault server n6"
 sleep 30
-cp vault-n2.hcl /etc/vault.d
+cp vault-n6.hcl /etc/vault.d
 vault server -config=/etc/vault.d/vault-n6.hcl -log-level=debug \
   > /tmp/vault-out.txt 2> /tmp/vault-err.txt &
 
