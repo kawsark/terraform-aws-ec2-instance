@@ -1,23 +1,24 @@
-terraform {
-  required_version = ">= 0.11.0"
-}
-
 provider "aws" {
   region = "${var.aws_region}"
 }
 
 resource "aws_instance" "ubuntu" {
-  count	 	= "${var.count}"
-  ami           = "${var.ami_id}"
-  instance_type = "${var.instance_type}"
+  count             = "${var.count}"
+  ami               = "${var.ami_id}"
+  instance_type     = "${var.instance_type}"
   availability_zone = "${var.aws_region}a"
 
   tags {
-    Name = "${var.name}-${count.index}"
+    Name  = "${var.name}-${count.index}"
     owner = "${var.owner}"
-    TTL = "${var.ttl}"
+    TTL   = "${var.ttl}"
   }
- 
-  user_data = "${file("user-data.web")}"
 
+  user_data = "${var.user_data}"
+  key_name  = "${var.key_name}"
+  subnet_id = "${var.subnet_id}"
+  private_ip = "${var.private_ip}"
+
+  # https://github.com/hashicorp/terraform/issues/13869
+  vpc_security_group_ids = ["${var.sg_ids}"]
 }

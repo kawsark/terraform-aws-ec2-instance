@@ -1,0 +1,8 @@
+{
+    "server" : false,
+    "datacenter" : "local-dc1",
+    "data_dir" : "/tmp/consul",
+    "log_level" : "DEBUG",
+    "enable_syslog" : true,
+    "retry_join" : ["n1","n2"]
+}

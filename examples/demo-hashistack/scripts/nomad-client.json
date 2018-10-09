@@ -1,0 +1,23 @@
+{
+    "client" : {
+        "enabled" : true
+    },
+    "advertise": {
+      "http" : "172.20.20.15",
+      "rpc"  : "172.20.20.15",
+      "serf" : "172.20.20.15"
+    },
+    "bind_addr" : "0.0.0.0",
+    "datacenter" : "local-dc1",
+    "data_dir" : "/var/nomad",
+    "log_level" : "INFO",
+    "enable_syslog" : true
+    "consul" : {
+        "address" : "consul.service.consul"
+    },
+    "vault" : {
+        "enabled" : true,
+        "address" : "http://vault.service.consul:8200",
+        "tls_skip_verify" : true
+    }
+}
