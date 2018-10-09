@@ -4,7 +4,7 @@ provider "aws" {
 
 module "n1" {
   source    = "../../"
-  name      = "n1"
+  name      = "demo-hashistack-n1"
   owner     = "${var.owner}"
   count     = "1"
   key_name  = "${var.key_name}"
@@ -16,6 +16,7 @@ module "n1" {
 
 module "n2" {
   source    = "../../"
+  name      = "demo-hashistack-n2"
   owner     = "${var.owner}"
   count     = "1"
   key_name  = "${var.key_name}"
@@ -27,6 +28,7 @@ module "n2" {
 
 module "n3" {
   source    = "../../"
+  name      = "demo-hashistack-n3"
   owner     = "${var.owner}"
   count     = "1"
   key_name  = "${var.key_name}"
@@ -38,6 +40,7 @@ module "n3" {
 
 module "n4" {
   source    = "../../"
+  name      = "demo-hashistack-n4"
   owner     = "${var.owner}"
   count     = "1"
   key_name  = "${var.key_name}"

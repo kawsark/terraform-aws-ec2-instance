@@ -15,3 +15,9 @@ echo "Start Consul client n3"
 cp consul-client.json /etc/consul.d
 nohup consul agent -config-file=consul-client.json -bind "192.168.0.12" \
   > /tmp/consul-client-out.txt 2> /tmp/consul-client-err.txt &
+
+echo "Start Nomad client n3"
+sleep 40
+cp nomad-client.json /etc/nomad.d
+nomad agent -config=/etc/nomad.d/nomad-client.json \
+  > /tmp/nomad-client-out.txt 2> /tmp/nomad-client-err.txt &
