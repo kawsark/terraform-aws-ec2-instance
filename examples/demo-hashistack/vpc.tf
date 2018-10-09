@@ -108,3 +108,13 @@ resource "aws_security_group_rule" "ingress_allow_ssh" {
   cidr_blocks = ["${var.security_group_ingress}"]
   security_group_id = "${aws_security_group.mvd-sg.id}"
 }
+
+resource "aws_security_group_rule" "allow_cluster_inbound_from_self" {
+  type      = "ingress"
+  from_port = "0"
+  to_port   = "0"
+  protocol  = "-1"
+  self      = true
+
+  security_group_id = "${aws_security_group.mvd-sg.id}"
+}

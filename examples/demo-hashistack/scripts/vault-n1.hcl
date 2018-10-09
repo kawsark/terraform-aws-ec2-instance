@@ -1,6 +1,6 @@
 listener "tcp" {
   address          = "0.0.0.0:8200"
-  cluster_address  = "172.20.20.13:8201"
+  cluster_address  = "192.168.0.10:8201"
   tls_disable      = "true"
 }
 
@@ -9,5 +9,5 @@ storage "consul" {
   path    = "vault/"
 }
 
-api_addr = "http://172.20.20.13:8200"
-cluster_addr = "https://172.20.20.13:8201"
+api_addr = "http://192.168.0.10:8200"
+cluster_addr = "https://192.168.0.10:8201"

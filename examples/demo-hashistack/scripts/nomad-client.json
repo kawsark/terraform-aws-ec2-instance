@@ -2,11 +2,6 @@
     "client" : {
         "enabled" : true
     },
-    "advertise": {
-      "http" : "172.20.20.15",
-      "rpc"  : "172.20.20.15",
-      "serf" : "172.20.20.15"
-    },
     "bind_addr" : "0.0.0.0",
     "datacenter" : "local-dc1",
     "data_dir" : "/var/nomad",
