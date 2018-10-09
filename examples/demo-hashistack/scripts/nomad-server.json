@@ -1,6 +1,10 @@
 {
     "server": {
         "enabled" : true,
+        "bootstrap_expect" : "1"
+    },
+    "advertise": {
+      "http": "192.168.0.13:4646"
     },
     "bind_addr" : "0.0.0.0",
     "datacenter" : "local-dc1",
@@ -12,5 +16,8 @@
         "address" : "http://vault.service.consul:8200",
         "create_from_role" : "nomad-cluster",
         "tls_skip_verify" : true
+    },
+    "consul": {
+      "address": "192.168.0.13:8500"
     }
 }
