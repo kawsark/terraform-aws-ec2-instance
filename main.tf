@@ -12,6 +12,7 @@ resource "aws_instance" "ubuntu" {
     Name  = "${var.name}-${count.index}"
     owner = "${var.owner}"
     TTL   = "${var.ttl}"
+    sequence = "${var.sequence}"
   }
 
   user_data = "${var.user_data}"

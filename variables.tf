@@ -49,3 +49,8 @@ variable "sg_ids" {
   type = "list"
   default = []
 }
+
+variable "sequence" {
+  description = "Adds a sequence tag. An optional variable to allow for module dependence"
+  default = "0"
+}

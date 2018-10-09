@@ -12,6 +12,7 @@ module "n1" {
   subnet_id = "${aws_subnet.mvd-public-1.id}"
   sg_ids    = ["${aws_security_group.mvd-sg.id}"]
   private_ip = "${lookup(var.private_ip_map,"n1")}"
+  sequence = "0"
 }
 
 module "n2" {
@@ -24,6 +25,7 @@ module "n2" {
   subnet_id = "${aws_subnet.mvd-public-1.id}"
   sg_ids     = ["${aws_security_group.mvd-sg.id}"]
   private_ip = "${lookup(var.private_ip_map,"n2")}"
+  sequence = "${module.n1.id}"
 }
 
 module "n3" {
@@ -36,6 +38,7 @@ module "n3" {
   subnet_id = "${aws_subnet.mvd-public-1.id}"
   sg_ids     = ["${aws_security_group.mvd-sg.id}"]
   private_ip = "${lookup(var.private_ip_map,"n3")}"
+  sequence = "${module.n4.id}"
 }
 
 module "n4" {
@@ -48,4 +51,5 @@ module "n4" {
   subnet_id = "${aws_subnet.mvd-public-1.id}"
   sg_ids    = ["${aws_security_group.mvd-sg.id}"]
   private_ip = "${lookup(var.private_ip_map,"n4")}"
+  sequence = "${module.n2.id}"
 }
