@@ -8,6 +8,11 @@ variable "ami_id" {
   default = "ami-0552e3455b9bc8d50"
 }
 
+variable "count" {
+  description = "How many servers to provision"
+  default = 1
+}
+
 variable "instance_type" {
   description = "type of EC2 instance to provision."
   default = "t2.micro"
@@ -15,7 +20,7 @@ variable "instance_type" {
 
 variable "name" {
   description = "name to pass to Name tag"
-  default = "Provisioned by Terraform"
+  default = "terraform-ubuntu"
 }
 
 variable "owner" {
