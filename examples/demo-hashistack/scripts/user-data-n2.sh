@@ -16,14 +16,3 @@ cp consul-server.json /etc/consul.d
 nohup consul agent -config-file=/etc/consul.d/consul-server.json \
  -bind "192.168.0.11" -retry-join "192.168.0.10" > \
   /tmp/consul-out.txt 2> /tmp/consul-err.txt &
-
-echo "Start Vault server n2"
-sleep 30
-cp vault-n2.hcl /etc/vault.d
-vault server -config=/etc/vault.d/vault-n2.hcl -log-level=debug \
-  > /tmp/vault-out.txt 2> /tmp/vault-err.txt &
-
-sleep 5
-export VAULT_ADDR="http://localhost:8200"
-export VAULT_TOKEN=$(consul kv get vault/root_token)
-vault operator unseal $(consul kv get vault/unseal_key)

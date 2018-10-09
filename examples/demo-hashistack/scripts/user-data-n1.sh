@@ -16,13 +16,3 @@ cp consul-server.json /etc/consul.d
 nohup consul agent -config-file=/etc/consul.d/consul-server.json \
  -bind "192.168.0.10" -retry-join "192.168.0.11" > \
   /tmp/consul-out.txt 2> /tmp/consul-err.txt &
-
-echo "Start Vault server n1"
-sleep 10
-cp vault-n1.hcl /etc/vault.d
-nohup vault server -config=/etc/vault.d/vault-n1.hcl -log-level=debug \
-  > /tmp/vault-out.txt 2> /tmp/vault-err.txt &
-
-sleep 10
-chmod +x vault-setup.sh
-./vault-setup.sh

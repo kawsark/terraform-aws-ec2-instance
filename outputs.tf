@@ -3,5 +3,5 @@ output "public_dns" {
 }
 
 output "id" {
-  value = "${aws_instance.ubuntu.*.id}"
+  value = "${aws_instance.ubuntu.0.id}"
 }
