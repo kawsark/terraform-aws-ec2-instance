@@ -41,3 +41,6 @@ cat /etc/resolv.conf.backup | tee --append /etc/resolv.conf
 systemctl restart dnsmasq
 cp vault-addr.sh /etc/profile.d
 chmod a+x /etc/profile.d/vault-addr.sh
+
+echo "Set permissions"
+chown -R ubuntu /tmp

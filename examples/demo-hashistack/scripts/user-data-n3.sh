@@ -11,6 +11,21 @@ cd ${working_dir}
 chmod +x base-hashistack.sh
 ./base-hashistack.sh
 
+echo "Install Docker"
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+apt-get update -y
+sudo apt-get install -y docker-ce
+groupadd docker
+usermod -aG docker ubuntu
+systemctl enable docker
+systemctl start docker
+
+echo "Download redis client and build image"
+mkdir -p /tmp/redis-client-service
+git clone https://github.com/kawsark/redis-client-service.git -b password /tmp/redis-client-service
+docker build -t python-clientms /tmp/redis-client-service
+
 echo "Start Consul client n3"
 cp consul-client.json /etc/consul.d
 nohup consul agent -config-file=consul-client.json -bind "192.168.0.12" \
