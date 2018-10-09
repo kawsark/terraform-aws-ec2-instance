@@ -21,7 +21,9 @@ variable "private_ip_map" {
 
 variable "key_name" {}
 
-variable "security_group_ingress" {}
+variable "security_group_ingress" {
+  description = "Ingress CIDR to allow SSH and Hashistack access. Warning: setting 0.0.0.0/0 is a bad idea as this deployment does not use TLS."
+}
 
 variable "environment" {
   default = "demo"

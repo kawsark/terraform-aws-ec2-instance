@@ -9,5 +9,6 @@ storage "consul" {
   path    = "vault/"
 }
 
+ui = true
 api_addr = "http://192.168.0.14:8200"
 cluster_addr = "https://192.168.0.14:8201"

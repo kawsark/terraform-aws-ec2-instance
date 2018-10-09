@@ -1,6 +1,7 @@
 {
     "client" : {
-        "enabled" : true
+        "enabled" : true,
+        "servers" : ["192.168.0.13:4647"]
     },
     "advertise": {
       "http": "192.168.0.12:4646"
@@ -16,6 +17,6 @@
         "tls_skip_verify" : true
     },
     "consul" : {
-        "address" : "192.168.0.12:8500"
-    },
+        "address" : "127.0.0.1:8500"
+    }
 }

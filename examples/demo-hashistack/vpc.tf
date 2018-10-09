@@ -109,6 +109,24 @@ resource "aws_security_group_rule" "ingress_allow_ssh" {
   security_group_id = "${aws_security_group.mvd-sg.id}"
 }
 
+resource "aws_security_group_rule" "ingress_allow_nomad" {
+  type        = "ingress"
+  from_port   = 4646
+  to_port     = 4648
+  protocol    = "tcp"
+  cidr_blocks = ["${var.security_group_ingress}"]
+  security_group_id = "${aws_security_group.mvd-sg.id}"
+}
+
+resource "aws_security_group_rule" "ingress_allow_consul_vault" {
+  type        = "ingress"
+  from_port   = 8200
+  to_port     = 8600
+  protocol    = "tcp"
+  cidr_blocks = ["${var.security_group_ingress}"]
+  security_group_id = "${aws_security_group.mvd-sg.id}"
+}
+
 resource "aws_security_group_rule" "allow_cluster_inbound_from_self" {
   type      = "ingress"
   from_port = "0"
