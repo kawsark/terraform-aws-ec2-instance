@@ -3,9 +3,9 @@ echo "Setup pre-req"
 apt-get update -y
 apt-get install -y curl unzip jq dnsutils dnsmasq git
 cd /tmp
-export git_branch    = "userdata"
-export git_clone_url = "https://github.com/kawsark/terraform-aws-ec2-instance.git"
-export working_dir   = "terraform-aws-ec2-instance/examples/demo-hashistack/scripts"
+export git_branch="userdata"
+export git_clone_url="https://github.com/kawsark/terraform-aws-ec2-instance.git"
+export working_dir="terraform-aws-ec2-instance/examples/demo-hashistack/scripts"
 git clone -b ${git_branch} --single-branch ${git_clone_url}
 cd ${working_dir}
 chmod +x base-hashistack.sh
