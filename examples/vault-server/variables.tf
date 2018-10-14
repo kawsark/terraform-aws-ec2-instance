@@ -4,11 +4,18 @@ variable "aws_region" {
 }
 
 variable "owner" {
-  default = "demouser"
+  description = "A value for the owner tag"
+  default     = "demouser"
+}
+
+variable "ttl" {
+  description = "A value for the ttl tag"
+  default     = "48"
 }
 
 variable "private_ip_map" {
   type = "map"
+
   default = {
     n1 = "192.168.0.10"
     n2 = "192.168.0.11"
@@ -43,11 +50,10 @@ variable "public_subnet_2_block" {
 
 variable "vault_version" {
   description = "Version of Vault binary to download"
-  default = "0.11.3" 
+  default     = "0.11.3"
 }
 
 variable "consul_version" {
   description = "Version of Consul binary to download"
-  default = "1.2.2"
+  default     = "1.2.2"
 }
-
