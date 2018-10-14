@@ -16,6 +16,7 @@ module "vault-server" {
   source    = "github.com/kawsark/terraform-aws-ec2-instance?ref=userdata"
   name      = "demo-vault-server"
   owner     = "${var.owner}"
+  ttl	    = "168"
   count     = "1"
   key_name  = "${var.key_name}"
   user_data = "${data.template_file.startup_script.rendered}"
