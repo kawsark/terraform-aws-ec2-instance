@@ -24,3 +24,8 @@ module "vault-server" {
   private_ip = "${lookup(var.private_ip_map,"n1")}"
   sequence = "0"
 }
+
+output "public_dns" {
+  value = "${module.vault-server.public_dns}"
+}
+
