@@ -112,6 +112,7 @@ cat /tmp/vault.txt | jq -r '.unseal_keys_b64[0]' > /tmp/unseal_key
 cat /tmp/vault.txt | jq -r .root_token > /tmp/root_token
 export VAULT_TOKEN=$(cat /tmp/root_token)
 vault operator unseal $(cat /tmp/unseal_key)
+consul kv put vault/root_token $(cat /tmp/root_token)
 
 echo "Set permissions"
 chown -R ubuntu /tmp
