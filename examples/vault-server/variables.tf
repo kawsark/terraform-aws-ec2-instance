@@ -58,3 +58,16 @@ variable "consul_version" {
   description = "Version of Consul binary to download"
   default     = "1.2.2"
 }
+
+# Optionally create a Cloudflare DNS record
+# Note: enabling this will require CLOUDFLARE_EMAIL and CLOUDFLARE_TOKEN
+variable "create_cloudflare_dns" {
+  description = "If set to 1, attempts to create a CNAME record with server public DNS"
+  default = "0"
+}
+
+variable "cloudflare_domain" {
+  description = "If create_cloudflare_dns is set to 1, then set the root domain appropriately"
+  default = "example.com"
+}
+  
