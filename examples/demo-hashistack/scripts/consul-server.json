@@ -5,6 +5,6 @@
   "log_level": "DEBUG",
   "server": true,
   "bootstrap_expect": 2,
-  "enable_script_checks": true,
+  "enable_script_checks": false,
   "ui": true
 }
