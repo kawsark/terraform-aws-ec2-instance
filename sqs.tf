@@ -1,6 +1,6 @@
 module "sqs" {
   source  = "terraform-aws-modules/sqs/aws"
-  version = "1.2.0"
+#  version = "1.2.0"
 
  name = "kawsar-sqs-module-test"
 
