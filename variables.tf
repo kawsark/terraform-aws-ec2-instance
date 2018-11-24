@@ -15,7 +15,7 @@ variable "count" {
 
 variable "instance_type" {
   description = "type of EC2 instance to provision."
-  default = "t2.large"
+  default = "t2.small"
 }
 
 variable "name" {
