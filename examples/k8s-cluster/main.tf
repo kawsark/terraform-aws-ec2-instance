@@ -3,20 +3,25 @@ provider "aws" {
 }
 
 # Render userdata
-data "http" "k8s-user-data" {
-  url = "https://gist.githubusercontent.com/initcron/40b71211cb693f541ce35fe3fb1adb11/raw/e1db293bbef340eec9067e096f010a591cd674c5/k8s-user-data.sh"
+data "template_file" "startup_script" {
+  template = "${file("${path.module}/k8s-user-data.sh.tpl")}"
+
+  vars {
+    DOCKER_VERSION = "${var.docker_version}"
+  }
 }
 
 # K8S cluster
 module "aws-kubernetes" {
-  source     = "github.com/kawsark/terraform-aws-ec2-instance?ref=userdata"
+  source     	 = "github.com/kawsark/terraform-aws-ec2-instance?ref=userdata"
+  instance_type  = "t2.medium"
   name       = "aws-kubernetes"
   ami_id     = "${var.ami_id}"
   owner      = "${var.owner}"
   ttl        = "${var.ttl}"
   count      = "3"
   key_name   = "${var.key_name}"
-  user_data  = "${data.http.k8s-user-data.body}"
+  user_data  = "${data.template_file.startup_script.rendered}"
   subnet_id  = "${aws_subnet.mvd-public-1.id}"
   sg_ids     = ["${aws_security_group.mvd-sg.id}"]
   sequence   = "0"
