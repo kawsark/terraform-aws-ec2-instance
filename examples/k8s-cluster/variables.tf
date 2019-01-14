@@ -17,19 +17,6 @@ variable "ttl" {
   default     = "48"
 }
 
-variable "private_ip_map" {
-  type = "map"
-
-  default = {
-    n1 = "192.168.0.10"
-    n2 = "192.168.0.11"
-    n3 = "192.168.0.12"
-    n4 = "192.168.0.13"
-    n5 = "192.168.0.14"
-    n6 = "192.168.0.15"
-  }
-}
-
 variable "key_name" {}
 
 variable "security_group_ingress" {

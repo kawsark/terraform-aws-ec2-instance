@@ -1,3 +1,5 @@
-owner = "kawsar@hashicorp.com"
-key_name = "kawsar-useast2-100918"
-security_group_ingress = "[95.8.7.143/32]"
+owner = "email@example.com"
+key_name = "mykey"
+security_group_ingress = ["1.1.1.1/32"]
+aws_region = "us-east-2"
+environment = "dev"
