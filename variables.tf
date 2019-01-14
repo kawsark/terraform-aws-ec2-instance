@@ -41,8 +41,6 @@ variable "user_data" {
   default     = "cd /tmp && echo \"Provisioned by Terraform\" > user_data.txt"
 }
 
-variable "private_ip" {}
-
 variable "subnet_id" {}
 
 variable "sg_ids" {

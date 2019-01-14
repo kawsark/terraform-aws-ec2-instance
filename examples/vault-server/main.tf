@@ -23,7 +23,6 @@ module "vault-server" {
   user_data  = "${data.template_file.startup_script.rendered}"
   subnet_id  = "${aws_subnet.mvd-public-1.id}"
   sg_ids     = ["${aws_security_group.mvd-sg.id}"]
-  private_ip = "${lookup(var.private_ip_map,"n1")}"
   sequence   = "0"
 }
 

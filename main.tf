@@ -18,7 +18,6 @@ resource "aws_instance" "ubuntu" {
   user_data = "${var.user_data}"
   key_name  = "${var.key_name}"
   subnet_id = "${var.subnet_id}"
-  private_ip = "${var.private_ip}"
 
   # https://github.com/hashicorp/terraform/issues/13869
   vpc_security_group_ids = ["${var.sg_ids}"]
