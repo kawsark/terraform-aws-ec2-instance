@@ -2,6 +2,11 @@ variable "ami_id" {
   default     = "ami-00c5e3f4a8dd369e8"  #16.04 LTS ubuntu xenial us-east-2
 }
 
+variable cluster_size {
+  description = "Qty of K8s nodes to provision"
+  default = 3
+}
+
 variable "aws_region" {
   description = "AWS region"
   default     = "us-east-2"

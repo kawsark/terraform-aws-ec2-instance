@@ -19,7 +19,7 @@ module "aws-kubernetes" {
   ami_id     = "${var.ami_id}"
   owner      = "${var.owner}"
   ttl        = "${var.ttl}"
-  count      = "3"
+  count      = "${var.cluster_size}"
   key_name   = "${var.key_name}"
   user_data  = "${data.template_file.startup_script.rendered}"
   subnet_id  = "${aws_subnet.mvd-public-1.id}"
