@@ -1,6 +1,30 @@
 ### Terraform code to initialize a K8S cluster in AWS
 https://github.com/schoolofdevops/kubernetes-fundamentals/blob/master/tutorials/1.%20install_kubernetes.md
 
+### Adjust provider:
+
+If `create_cloudflare_dns=1`, then the following Cloudflare provider variables will need be set:
+```
+export CLOUDFLARE_EMAIL=<cloudflare-email>
+export CLOUDFLARE_TOKEN=<cloudflare-token>
+```
+
+### Adjust variables:
+```
+cp terraform.tfvars.example terraform.tfvars
+# Set required variables: key_name, security_group_ingress and any other optional ones you want to set. For example:
+
+vim terraform.tfvars
+owner = "kawsar"
+key_name = "your-useast2-keypair"
+security_group_ingress = ["your-ip-address/32"]
+aws_region = "us-east-2"
+environment = "dev"
+create_cloudflare_dns = "1"
+cloudflare_domain = "example.com"
+ttl = 120%
+```
+
 ### Post Apply steps:
 ```
 # On master node

@@ -18,3 +18,10 @@ resource "cloudflare_record" "k8s-workers" {
   ttl    = 1
 }
 
+output "cloudflare_master_dns" {
+  value = "${cloudflare_record.k8s-master.*.hostname}"
+}
+
+output "cloudflare_worker_dns" {
+  value = "${cloudflare_record.k8s-workers.*.hostname}"
+}
