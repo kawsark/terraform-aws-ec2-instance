@@ -35,3 +35,19 @@ sudo kubeadm init --apiserver-advertise-address ${ipv4} --pod-network-cidr=192.1
 # Note: you commands will be different
 _sudo kubeadm join --token c04797.8db60f6b2c0dd078 192.168.12.10:6443 --discovery-token-ca-cert-hash sha256:88ebb5d5f7fdfcbbc3cde98690b1dea9d0f96de4a7e6bf69198172debca74cd0_
 ```
+
+### Installing CNI with Weave:
+```
+# Run on master node:
+export kubever=$(sudo kubectl version | base64 | tr -d '\n')
+sudo kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$kubever"
+sudo kubectl get nodes
+```
+
+### Validate setup:
+```
+sudo kubectl version
+sudo kubectl cluster-info
+sudo kubectl get pods -n kube-system
+sudo kubectl get events
+```
