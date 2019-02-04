@@ -27,7 +27,8 @@ ttl = 120%
 
 ### Post Apply steps:
 ```
-# On master node
+# Execute on master node. 
+# Note: Optionally adjust ipv4 to a proper hostname for the K8S API server. E.g. export ipv4=k8s-api.example.org 
 export ipv4=$(curl -s 169.254.169.254/latest/meta-data/local-ipv4)
 sudo kubeadm init --apiserver-advertise-address ${ipv4} --pod-network-cidr=192.168.0.0/16
 
