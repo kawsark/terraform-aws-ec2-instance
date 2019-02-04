@@ -26,13 +26,14 @@ ttl = 120%
 ```
 
 ### Post Apply steps:
+Run the `kubeadm init` example command on the Master node to initialize the cluster.
+- Optionally add  `--apiserver-cert-extra-sans` parameter to a proper hostname for the K8S API server. E.g. `--apiserver-cert-extra-sans=k8s-api.example.org`
 ```
-# Execute on master node. 
-# Note: Optionally adjust ipv4 to a proper hostname for the K8S API server. E.g. export ipv4=k8s-api.example.org 
+# Execute on master node
 export ipv4=$(curl -s 169.254.169.254/latest/meta-data/local-ipv4)
 sudo kubeadm init --apiserver-advertise-address ${ipv4} --pod-network-cidr=192.168.0.0/16
 
-# Run the resulting command on other nodes:
+# Run the resulting command on other nodes
 # Note: you commands will be different
 _sudo kubeadm join --token c04797.8db60f6b2c0dd078 192.168.12.10:6443 --discovery-token-ca-cert-hash sha256:88ebb5d5f7fdfcbbc3cde98690b1dea9d0f96de4a7e6bf69198172debca74cd0_
 ```
@@ -40,15 +41,23 @@ _sudo kubeadm join --token c04797.8db60f6b2c0dd078 192.168.12.10:6443 --discover
 ### Installing CNI with Weave:
 ```
 # Run on master node:
+
+## Adjust kubectl
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+## Install CNI
 export kubever=$(sudo kubectl version | base64 | tr -d '\n')
 sudo kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$kubever"
 sudo kubectl get nodes
 ```
 
-### Validate setup:
+### Validate setup
 ```
-sudo kubectl version
-sudo kubectl cluster-info
-sudo kubectl get pods -n kube-system
-sudo kubectl get events
+# On master node:
+kubectl version
+kubectl cluster-info
+kubectl get pods -n kube-system
+kubectl get events
 ```
