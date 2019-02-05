@@ -14,6 +14,14 @@ sudo mv consul /usr/bin/consul
 sudo mkdir /etc/consul.d
 sudo chmod a+w /etc/consul.d
 
+# Make directories for Vault and Consul
+sudo mkdir /opt/consul
+sudo mkdir /opt/vault
+chown -R ubuntu /opt/consul
+chown -R ubuntu /opt/vault
+sudo chmod o+rwx /opt/consul
+sudo chmod o+rxw /opt/vault
+
 # Install and start Consul service
 sudo cat <<EOF > /etc/systemd/system/consul.service
 [Unit]
@@ -35,7 +43,7 @@ EOF
 sudo cat <<EOF > /etc/consul.d/consul.json
 {
   "datacenter": "dc1",
-  "data_dir": "/tmp/consul",
+  "data_dir": "/opt/consul",
   "log_level": "DEBUG",
   "node_name": "n1",
   "server": true,
@@ -107,15 +115,15 @@ systemctl start vault.service
 # Initialize and unseal:
 sleep 10
 export VAULT_ADDR="http://localhost:8200"
-vault operator init -format=json -n 1 -t 1 > /tmp/vault.txt
-cat /tmp/vault.txt | jq -r '.unseal_keys_b64[0]' > /tmp/unseal_key
-cat /tmp/vault.txt | jq -r .root_token > /tmp/root_token
-export VAULT_TOKEN=$(cat /tmp/root_token)
-vault operator unseal $(cat /tmp/unseal_key)
-consul kv put vault/root_token $(cat /tmp/root_token)
+vault operator init -format=json -n 1 -t 1 > /opt/vault/vault.txt
+cat /opt/vault/vault.txt | jq -r '.unseal_keys_b64[0]' > /opt/vault/unseal_key
+cat /opt/vault/vault.txt | jq -r .root_token > /opt/vault/root_token
+export VAULT_TOKEN=$(cat /opt/vault/root_token)
+vault operator unseal $(cat /opt/vault/unseal_key)
+consul kv put vault/root_token $(cat /opt/vault/root_token)
 
 echo "Set permissions"
-chown -R ubuntu /tmp
+chown -R ubuntu /opt/vault
 
 echo "Setup DNS"
 cat <<EOF > /etc/dnsmasq.d/consul.dnsmasq
@@ -128,5 +136,5 @@ cat /etc/resolv.conf.backup | tee --append /etc/resolv.conf
 systemctl restart dnsmasq
 
 echo 'export VAULT_ADDR="http://active.vault.service.consul:8200"' >> /home/ubuntu/.bashrc
-echo "export VAULT_TOKEN=$(cat /tmp/root_token)" >> /home/ubuntu/.bashrc
+echo "export VAULT_TOKEN=$(cat /opt/vault/root_token)" >> /home/ubuntu/.bashrc
 
