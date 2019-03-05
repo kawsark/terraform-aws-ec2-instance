@@ -20,7 +20,7 @@ variable "instance_type" {
 
 variable "name" {
   description = "name to pass to Name tag"
-  default     = "terraform-ubuntu"
+  default     = "tf-demo-ec2"
 }
 
 variable "owner" {

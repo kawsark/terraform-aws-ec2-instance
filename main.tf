@@ -2,7 +2,7 @@ provider "aws" {
   region = "${var.aws_region}"
 }
 
-resource "aws_instance" "ubuntu" {
+resource "aws_instance" "demo_server" {
   count             = "${var.count}"
   ami               = "${var.ami_id}"
   instance_type     = "${var.instance_type}"
