@@ -1,5 +1,25 @@
 #!/bin/bash
 
+function vault_consul_is_up {
+  try=0
+  max=12
+  vault_consul_is_up=$(consul catalog services | grep vault)
+  while [ -z "$vault_consul_is_up" ]
+  do
+    touch "/tmp/vault-try-$try"
+    if [[ "$try" == '12' ]]; then
+      echo "Giving up on consul catalog services after 12 attempts."
+      break
+    fi
+    ((try++))
+    echo "Vault or Consul is not up, sleeping 10 secs [$try/$max]"
+    sleep 10
+    vault_consul_is_up=$(consul catalog services | grep vault)
+  done
+
+  echo "Vault and Consul is up, proceeding with Initialization"
+}
+
 #Install Consul and dependencies
 echo "Installing dependencies ..."
 sudo apt-get update
@@ -112,8 +132,10 @@ EOF
 systemctl enable vault.service
 systemctl start vault.service
 
+# Wait for vault to register with consul
+vault_consul_is_up
+
 # Initialize and unseal:
-sleep 10
 export VAULT_ADDR="http://localhost:8200"
 vault operator init -format=json -n 1 -t 1 > /opt/vault/vault.txt
 cat /opt/vault/vault.txt | jq -r '.unseal_keys_b64[0]' > /opt/vault/unseal_key
@@ -137,4 +159,3 @@ systemctl restart dnsmasq
 
 echo 'export VAULT_ADDR="http://active.vault.service.consul:8200"' >> /home/ubuntu/.bashrc
 echo "export VAULT_TOKEN=$(cat /opt/vault/root_token)" >> /home/ubuntu/.bashrc
-
