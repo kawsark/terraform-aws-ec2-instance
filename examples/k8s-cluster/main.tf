@@ -30,3 +30,7 @@ module "aws-kubernetes" {
 output "public_dns" {
   value = "${module.aws-kubernetes.public_dns}"
 }
+
+output "public_ip" {
+  value = "${module.aws-kubernetes.public_ip}"
+}

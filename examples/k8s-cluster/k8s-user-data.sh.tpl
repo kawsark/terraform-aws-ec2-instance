@@ -21,8 +21,6 @@ apt-get update
 
 apt-get install -yq docker-ce=${DOCKER_VERSION}
 
-
-
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 
 sudo cat <<EOF > /etc/apt/sources.list.d/kubernetes.list
@@ -40,3 +38,4 @@ sudo rm -rf /var/lib/kubelet/*
 
 sudo apt-get install nfs-common -y
 
+kubeadm config images pull
