@@ -1,0 +1,10 @@
+terraform {
+  backend "remote" {
+    hostname = "ptfe.therealk.com"
+    organization = "kawsar-org"
+
+    workspaces {
+      name = "aws-ec2-instance-vault-server"
+    }
+  }
+}
