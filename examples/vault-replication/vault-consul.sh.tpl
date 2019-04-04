@@ -3,6 +3,12 @@
 function vault_consul_is_up {
   try=0
   max=12
+
+  export CONSUL_HTTP_ADDR="https://$(hostname):8501"
+  export CONSUL_CACERT=/etc/consul.d/consul-agent-ca.pem
+  export CONSUL_CLIENT_CERT=/etc/consul.d/${dc}-cli-consul-0.pem
+  export CONSUL_CLIENT_KEY=/etc/consul.d/${dc}-cli-consul-0-key.pem
+
   vault_consul_is_up=$(consul catalog services | grep vault)
   while [ -z "$vault_consul_is_up" ]
   do
@@ -40,6 +46,17 @@ chown -R ubuntu /opt/vault
 sudo chmod o+rwx /opt/consul
 sudo chmod o+rxw /opt/vault
 
+# Generate consul certs:
+export local_ip=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
+cd /etc/consul.d
+consul tls ca create
+consul tls cert create -server -dc="${dc}" -additional-dnsname="$(hostname)" -additional-dnsname="$${local_ip}"
+consul tls cert create -client -dc="${dc}"
+consul tls cert create -cli -dc="${dc}"
+chown -R ubuntu /etc/consul.d/*.pem
+sudo chmod o+r /etc/consul.d/*.pem
+cd -
+
 # Install and start Consul service
 sudo cat <<EOF > /etc/systemd/system/consul.service
 [Unit]
@@ -58,25 +75,33 @@ KillSignal=SIGTERM
 WantedBy=multi-user.target
 EOF
 
-
 sudo cat <<EOF > /etc/consul.d/consul.json
 {
-  "datacenter": "${region}",
+  "datacenter": "${dc}",
   "data_dir": "/opt/consul",
   "log_level": "DEBUG",
-  "node_name": "n1",
+  "node_name": "$(hostname)",
   "server": true,
   "bootstrap_expect": 1,
   "enable_script_checks": false,
-  "bind_addr": "0.0.0.0",
-  "client_addr": "0.0.0.0",
+  "addresses": {
+    "https": "$${local_ip}",
+    "http": "$${local_ip}",
+    "grpc": "$${local_ip}"
+  },
+  "ports": {
+    "http": 8500,
+    "https": 8501
+  },
+  "ca_file": "/etc/consul.d/consul-agent-ca.pem",
+  "cert_file": "/etc/consul.d/${dc}-server-consul-0.pem",
+  "key_file": "/etc/consul.d/${dc}-server-consul-0-key.pem",
   "connect": {
     "enabled": true
   },
   "ui": true
 }
 EOF
-
 
 # Start service
 systemctl enable consul.service
@@ -116,22 +141,24 @@ WantedBy=multi-user.target
 EOF
 
 # Write Vault configuration file:
+export public_ipv4=$(curl -s curl http://169.254.169.254/latest/meta-data/public-ipv4)
 cat <<EOF > /etc/vault.d/vault.hcl
 listener "tcp" {
-  address = "0.0.0.0:8200"
+  address = "$${local_ip}:8200"
   tls_disable = "true"
 }
 
 storage "consul" {
-  address = "127.0.0.1:8500"
+  address = "http://$${local_ip}:8500"
   path    = "vault/"
+  tls_ca_file = "/etc/consul.d/consul-agent-ca.pem"
+  tls_cert_file = "/etc/consul.d/${dc}-client-consul-0.pem"
+  tls_key_file = "/etc/consul.d/${dc}-client-consul-0-key.pem"
 }
 
 ui = "true"
+api_addr = "http://$${public_ipv4}:8200"
 EOF
-
-# Write Vault API address:
-echo "api_addr = \"http://$(curl -s curl http://169.254.169.254/latest/meta-data/public-ipv4):8200\"" >> /etc/vault.d/vault.hcl
 
 # Start service
 systemctl enable vault.service
@@ -141,7 +168,7 @@ systemctl start vault.service
 vault_consul_is_up
 
 # Initialize and unseal:
-export VAULT_ADDR="http://localhost:8200"
+export VAULT_ADDR="http://$${local_ip}:8200"
 vault operator init -format=json -n 1 -t 1 > /opt/vault/vault.txt
 cat /opt/vault/vault.txt | jq -r '.unseal_keys_b64[0]' > /opt/vault/unseal_key
 cat /opt/vault/vault.txt | jq -r .root_token > /opt/vault/root_token
@@ -166,5 +193,12 @@ echo "nameserver 127.0.0.1" | tee /etc/resolv.conf
 cat /etc/resolv.conf.backup | tee --append /etc/resolv.conf
 systemctl restart dnsmasq
 
-echo 'export VAULT_ADDR="http://active.vault.service.consul:8200"' >> /home/ubuntu/.bashrc
-echo "export VAULT_TOKEN=$(cat /opt/vault/root_token)" >> /home/ubuntu/.bashrc
+echo "Setup bash profile"
+cat <<EOF >> /home/ubuntu/.bashrc
+export VAULT_ADDR="http://active.vault.service.consul:8200"
+export VAULT_TOKEN=$(cat /opt/vault/root_token)
+export CONSUL_HTTP_ADDR="https://$(hostname):8501"
+export CONSUL_CACERT=/etc/consul.d/consul-agent-ca.pem
+export CONSUL_CLIENT_CERT=/etc/consul.d/${dc}-cli-consul-0.pem
+export CONSUL_CLIENT_KEY=/etc/consul.d/${dc}-cli-consul-0-key.pem
+EOF

@@ -12,7 +12,20 @@ data "template_file" "startup_script" {
   template = "${file("${path.module}/vault-consul.sh.tpl")}"
 
   vars {
-    region = "${var.aws_region}"
+    dc = "${var.aws_region}"
+    vault_url  = "${var.vault_url}"
+    vault_license = "${var.vault_license}"
+    consul_url  = "${var.consul_url}"
+    consul_license = "${var.consul_license}"
+  }
+}
+
+# Render userdata for secondary
+data "template_file" "startup_script_secondary" {
+  template = "${file("${path.module}/vault-consul.sh.tpl")}"
+
+  vars {
+    dc = "${var.aws_region_secondary}"
     vault_url  = "${var.vault_url}"
     vault_license = "${var.vault_license}"
     consul_url  = "${var.consul_url}"
@@ -71,7 +84,7 @@ module "vault-server-secondary" {
   ttl        = "${var.ttl}"
   count      = "1"
   key_name   = "${var.key_name_secondary}"
-  user_data  = "${data.template_file.startup_script.rendered}"
+  user_data  = "${data.template_file.startup_script_secondary.rendered}"
   subnet_id  = "${module.vpc-secondary.public-subnet-id}"
   sg_ids     = ["${module.vpc-secondary.security-group-id}"]
   sequence   = "0"
