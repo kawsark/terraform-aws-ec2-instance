@@ -10,7 +10,7 @@ variable "ami_id" {
 
 variable "count" {
   description = "How many servers to provision"
-  default = 2
+  default = 1
 }
 
 variable "instance_type" {
