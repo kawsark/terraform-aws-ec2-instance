@@ -26,28 +26,28 @@ export PATH=$PATH:/usr/local/bin
 # Install Consul
 
 # Install dependencies
-sudo yum update
-sudo yum install -y git unzip curl jq dnsutils dnsmasq
+yum update
+yum install -y git unzip curl jq dnsutils dnsmasq
 
 # Download and install consul
 echo "Fetching Consul version ${CONSUL_VERSION} ..."
 cd /tmp/
-curl -s https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip -o consul.zip
+#curl -s https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip -o consul.zip
 unzip consul.zip
-sudo mv consul /usr/local/bin/
+mv consul /usr/local/bin/
 consul --version
 
 # Add consul user
-sudo useradd --system --home /etc/consul.d --shell /bin/false consul
-sudo mkdir --parents /opt/consul
-sudo chown -R consul:consul /opt/consul
-sudo chown consul:consul /usr/local/bin/consul
+useradd --system --home /etc/consul.d --shell /bin/false consul
+mkdir --parents /opt/consul
+chown -R consul:consul /opt/consul
+chown consul:consul /usr/local/bin/consul
 
 # Configure /etc/consul.d/consul.hcl
-sudo mkdir --parents /etc/consul.d
-sudo touch /etc/consul.d/consul.hcl
-sudo chown --recursive consul:consul /etc/consul.d
-sudo chmod 640 /etc/consul.d/consul.hcl
+mkdir --parents /etc/consul.d
+touch /etc/consul.d/consul.hcl
+chown --recursive consul:consul /etc/consul.d
+chmod 640 /etc/consul.d/consul.hcl
 
 cat <<EOF > /etc/consul.d/consul.hcl
 datacenter = "vault-dc1"
@@ -56,10 +56,10 @@ EOF
 echo "encrypt = \"$(/usr/local/bin/consul keygen)\"" >> /etc/consul.d/consul.hcl
 
 # Configure /etc/consul.d/server.hcl
-sudo mkdir --parents /etc/consul.d
-sudo touch /etc/consul.d/server.hcl
-sudo chown --recursive consul:consul /etc/consul.d
-sudo chmod 640 /etc/consul.d/server.hcl
+mkdir --parents /etc/consul.d
+touch /etc/consul.d/server.hcl
+chown --recursive consul:consul /etc/consul.d
+chmod 640 /etc/consul.d/server.hcl
 
 cat <<EOF > /etc/consul.d/server.hcl
 server = true
@@ -70,7 +70,7 @@ echo "bind_addr = \"$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4
 
 
 # Install and start Consul service
-sudo cat <<EOF > /etc/systemd/system/consul.service
+cat <<EOF > /etc/systemd/system/consul.service
 [Unit]
 Description=consul agent
 Requires=network-online.target
@@ -89,9 +89,9 @@ EOF
 
 # Start consul daemon:
 # sudo -u consul nohup /usr/local/bin/consul agent -config-dir=/etc/consul.d/ &> /opt/consul/consul.out &
-sudo mkdir -p /var/log/consul
-sudo chown -R consul:consul /var/log/consul
-sudo chmod -R u+rw /var/log/consul
+mkdir -p /var/log/consul
+chown -R consul:consul /var/log/consul
+chmod -R u+rw /var/log/consul
 #sudo curl -s https://raw.githubusercontent.com/tonyp-hc/hashicorp-helper-scripts/master/consul/startup/consul.init -o /etc/init.d/consul
 #sudo chown root:root /etc/init.d/consul
 #sudo chmod u+x /etc/init.d/consul
@@ -102,21 +102,23 @@ systemctl enable consul.service
 systemctl start consul.service
 sleep 20
 
+echo "Consul service online, starting Vault install"
+
 # Install Vault
 curl -s https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip -o vault.zip
 unzip vault.zip
-sudo mv vault /usr/local/bin/
+mv vault /usr/local/bin/
 vault --version
 mkdir /etc/vault.d
 chmod a+w /etc/vault.d
 
 # Add vault user:
-sudo useradd --system --home /etc/vault.d --shell /bin/false vault
-sudo mkdir --parents /etc/vault.d
-sudo touch /etc/vault.d/vault.hcl
-sudo chown -R vault:vault /etc/vault.d
-sudo chmod 640 /etc/vault.d/vault.hcl
-sudo chown vault:vault /usr/local/bin/vault
+useradd --system --home /etc/vault.d --shell /bin/false vault
+mkdir --parents /etc/vault.d
+touch /etc/vault.d/vault.hcl
+chown -R vault:vault /etc/vault.d
+chmod 640 /etc/vault.d/vault.hcl
+chown vault:vault /usr/local/bin/vault
 
 # Add /etc/vault.d/vault.hcl file:
 cat <<EOF > /etc/vault.d/vault.hcl
@@ -132,12 +134,12 @@ ui = "true"
 EOF
 
 # Create /opt/vault:
-sudo mkdir -p /opt/vault
-sudo chown -R vault:vault /opt/vault
-sudo chmod -R u+rwx /opt/vault
+mkdir -p /opt/vault
+chown -R vault:vault /opt/vault
+chmod -R u+rwx /opt/vault
 
 # Start vault daemon:
-sudo setcap cap_ipc_lock=+ep /usr/local/bin/vault
+setcap cap_ipc_lock=+ep /usr/local/bin/vault
 
 
 # Install Vault service:
@@ -164,9 +166,9 @@ EOF
 
 
 # sudo -u vault nohup /usr/local/bin/vault server -config=/etc/vault.d/vault.hcl &> /opt/vault/vault.out &
-sudo mkdir -p /var/log/vault
-sudo chown -R vault:vault /var/log/vault
-sudo chmod -R u+rw /var/log/vault
+mkdir -p /var/log/vault
+chown -R vault:vault /var/log/vault
+chmod -R u+rw /var/log/vault
 #sudo curl -s https://raw.githubusercontent.com/tonyp-hc/hashicorp-helper-scripts/master/vault/startup/vault.init -o /etc/init.d/vault
 #sudo chown root:root /etc/init.d/vault
 #sudo chmod u+x /etc/init.d/vault
