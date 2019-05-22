@@ -3,6 +3,11 @@ variable "aws_region" {
   default     = "us-east-2"
 }
 
+variable "iam_instance_profile_name" {
+  description = "Instance profile name"
+  default = ""
+}
+
 variable "ami_id" {
   description = "ID of the AMI to provision. Default is Ubuntu 16.04 Base Image in us-east-2"
   default     = "ami-0552e3455b9bc8d50"
@@ -25,6 +30,16 @@ variable "name" {
 
 variable "owner" {
   description = "An Owner tag"
+}
+
+variable "app" {
+  description = "Optional application tag"
+  default = "terraform-app"
+}
+
+variable "namespace" {
+  description = "Optional project tag"
+  default = "demo"
 }
 
 variable "key_name" {

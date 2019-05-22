@@ -11,9 +11,12 @@ resource "aws_instance" "ubuntu" {
     Name  = "${var.name}-${count.index}"
     owner = "${var.owner}"
     TTL   = "${var.ttl}"
+    namespace = "${var.namespace}"
+    app = "${var.app}"
     sequence = "${var.sequence}"
   }
 
+  iam_instance_profile = "${var.iam_instance_profile_name}"
   user_data = "${var.user_data}"
   key_name  = "${var.key_name}"
   subnet_id = "${var.subnet_id}"
