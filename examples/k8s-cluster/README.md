@@ -61,3 +61,18 @@ kubectl cluster-info
 kubectl get pods -n kube-system
 kubectl get events
 ```
+
+### Enable Kubernetes Dashboard (Optional)
+Following steps from [Schoolofdevops](https://github.com/schoolofdevops/kubernetes-fundamentals/blob/master/tutorials/1.%20install_kubernetes.md#enable-kubernetes-dashboard)
+
+Installing Dashboard:
+```
+kubectl apply -f https://gist.githubusercontent.com/initcron/32ff89394c881414ea7ef7f4d3a1d499/raw/baffda78ffdcaf8ece87a76fb2bb3fd767820a3f/kube-dashboard.yaml
+```
+This will create a pod for the Kubernetes Dashboard. To access the Dashboard in the browser, run the below command:
+```
+kubectl describe svc kubernetes-dashboard -n kube-system
+```
+
+Now check for the NodePort and go to the browser: `https://masterip:NodePort`
+
