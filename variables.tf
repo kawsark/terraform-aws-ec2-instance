@@ -8,7 +8,7 @@ variable "ami_id" {
   default     = "ami-0552e3455b9bc8d50"
 }
 
-variable "count" {
+variable "num_servers" {
   description = "How many servers to provision"
   default     = 1
 }
@@ -41,14 +41,16 @@ variable "user_data" {
   default     = "cd /tmp && echo \"Provisioned by Terraform\" > user_data.txt"
 }
 
-variable "subnet_id" {}
+variable "subnet_id" {
+}
 
 variable "sg_ids" {
-  type = "list"
+  type    = list(string)
   default = []
 }
 
 variable "sequence" {
   description = "Adds a sequence tag. An optional variable to allow for module dependence"
-  default = "0"
+  default     = "0"
 }
+
