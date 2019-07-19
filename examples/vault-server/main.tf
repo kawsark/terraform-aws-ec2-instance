@@ -18,7 +18,7 @@ module "vault-server" {
   name      = "demo-vault-server"
   owner     = var.owner
   ttl       = var.ttl
-  count     = "1"
+  num_servers     = "1"
   key_name  = var.key_name
   user_data = data.template_file.startup_script.rendered
   subnet_id = aws_subnet.mvd-public-1.id
