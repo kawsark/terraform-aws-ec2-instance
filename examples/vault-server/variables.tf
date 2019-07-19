@@ -39,12 +39,12 @@ variable "public_subnet_2_block" {
 
 variable "vault_version" {
   description = "Version of Vault binary to download"
-  default     = "1.0.2"
+  default     = "1.1.3"
 }
 
 variable "consul_version" {
   description = "Version of Consul binary to download"
-  default     = "1.4.2"
+  default     = "1.5.2"
 }
 
 # Optionally create a Cloudflare DNS record
