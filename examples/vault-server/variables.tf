@@ -13,11 +13,12 @@ variable "ttl" {
   default     = "48"
 }
 
-variable "key_name" {}
+variable "key_name" {
+}
 
 variable "security_group_ingress" {
   description = "Ingress CIDR to allow SSH and Hashistack access. Warning: setting 0.0.0.0/0 is a bad idea as this deployment does not use TLS."
-  type = "list"
+  type        = list(string)
 }
 
 variable "environment" {
@@ -50,11 +51,11 @@ variable "consul_version" {
 # Note: enabling this will require CLOUDFLARE_EMAIL and CLOUDFLARE_TOKEN
 variable "create_cloudflare_dns" {
   description = "If set to 1, attempts to create a CNAME record with server public DNS"
-  default = "0"
+  default     = "0"
 }
 
 variable "cloudflare_domain" {
   description = "If create_cloudflare_dns is set to 1, then set the root domain appropriately"
-  default = "example.com"
+  default     = "example.com"
 }
-  
+
