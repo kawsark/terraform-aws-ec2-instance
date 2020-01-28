@@ -4,6 +4,7 @@ variable "owner" {
 
 module "demo-server" {
   source = "github.com/kawsark/terraform-aws-ec2-instance"
-  owner  = "${var.owner}"
-  count  = "1"
+  owner  = var.owner
+  num_servers  = "1"
 }
+
