@@ -9,7 +9,7 @@ resource "aws_instance" "ubuntu" {
   availability_zone = "${var.aws_region}a"
   key_name          = var.key_name
 
-  root_block_device = {
+  root_block_device {
     volume_size = var.root_block_volume_size
   }
 
