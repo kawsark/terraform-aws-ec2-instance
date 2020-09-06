@@ -3,6 +3,10 @@ variable "aws_region" {
   default     = "us-east-2"
 }
 
+variable "key_name" {
+  default = ""
+}
+
 variable "ami_id" {
   description = "ID of the AMI to provision. Default is Ubuntu 16.04 Base Image"
   default     = "ami-0552e3455b9bc8d50"
