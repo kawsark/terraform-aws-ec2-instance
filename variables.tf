@@ -4,7 +4,12 @@ variable "aws_region" {
 }
 
 variable "key_name" {
-  default = ""
+  description = "The key name to use for SSH"
+}
+
+variable "root_block_volume_size" {
+  description = "Size in GiB for the Root Volume"
+  default = "20"
 }
 
 variable "ami_id" {
