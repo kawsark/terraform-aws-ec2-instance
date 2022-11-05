@@ -3,19 +3,31 @@ variable "aws_region" {
   default     = "us-east-2"
 }
 
-variable "key_name" {
-  description = "The key name to use for SSH"
+variable "subnet_id_public" {
+  #TODO: Use terraform remote state for this
+  description = "Public subnet id that EC2 instances should be launched in"
 }
 
-variable "root_block_volume_size" {
-  description = "Size in GiB for the Root Volume"
-  default = "20"
+variable "subnet_id_private" {
+  #TODO: Use terraform remote state for this
+  description = "Public subnet id that EC2 instances should be launched in"
 }
 
-variable "ami_id" {
-  description = "ID of the AMI to provision. Default is Ubuntu 16.04 Base Image"
-  default     = "ami-0552e3455b9bc8d50"
+variable "security_group_ids" {
+  #TODO: Use terraform remote state for this
+  description = "The security groups that this EC2 instance should be attached to"
 }
+
+variable "go_sdk_version" {
+  description = "Go SDK verson to install for userdata"
+  default     = "go1.19.2"
+}
+
+variable "ssh_public_key" {
+  description = "Optional public key to SSH into server (appended to /home/ubuntu/.ssh/authorized_keys)"
+  default     = ""
+}
+
 
 variable "num_servers" {
   description = "How many servers to provision"
@@ -34,6 +46,7 @@ variable "name" {
 
 variable "owner" {
   description = "An Owner tag"
+  default     = "tfdemo"
 }
 
 variable "ttl" {
