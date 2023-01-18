@@ -1,0 +1,9 @@
+terraform {
+  cloud {
+    organization = "tfc-org"
+    workspaces {
+      name = "terraform-aws-ec2"
+    }
+  }
+}
+

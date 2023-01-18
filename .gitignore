@@ -2,6 +2,7 @@
 **/.terraform/*
 *.backup
 .terraform.lock.hcl
+remote.tf
 
 # .tfstate files
 *.tfstate

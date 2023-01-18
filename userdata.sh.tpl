@@ -3,9 +3,22 @@
 # Install dependencies
 echo "INFO: Installing dependencies ..."
 sudo apt-get update -y
-sudo apt-get install -y git unzip curl jq wget make awscli python3-pip
-sudo pip3 install --upgrade awscli
+sudo apt-get install -y git unzip curl jq wget make python3-pip nfs-common apache2-utils
+#sudp apt-get install awscli 
+#sudo pip3 install --upgrade awscli
 sudo pip3 install git-remote-codecommit
+
+# Install EFS client for EC2 and upgrade stunnel
+sudo apt-get -y install git binutils
+git clone https://github.com/aws/efs-utils
+cd efs-utils
+./build-deb.sh
+sudo apt-get -y install ./build/amazon-efs-utils*deb
+apt-get install stunnel4 -y
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
 
 # Install Kubectl
 sudo snap install kubectl --classic
@@ -16,10 +29,14 @@ curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/d
 sudo mv /tmp/eksctl /usr/local/bin
 eksctl version
 
+# Install helm
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
 
 # Add SSH key
-echo "INFO: SSH public key sum: $(echo $SSH_KEY | md5sum)"
-mkdir -p /home/ubuntu/.ssh && echo $SSH_KEY >> /home/ubuntu/.ssh/authorized_keys
+echo "INFO: SSH public key word count: $(echo ${SSH_KEY} | wc)"
+mkdir -p /home/ubuntu/.ssh && echo ${SSH_KEY} >> /home/ubuntu/.ssh/authorized_keys
 echo "INFO: $(wc /home/ubuntu/.ssh/authorized_keys)"
 
 # Install GO SDK
@@ -52,11 +69,13 @@ sudo apt-get install terraform -y
 # Install Goshares app
 echo "INFO: Installing Goshares app"
 cd /home/ubuntu
+mkdir -p go/src && cd go/src
 git clone https://gitlab.com/kawsark/goshares.git
+sudo chown -R ubuntu:ubuntu /home/ubuntu/go
 cd goshares
+export GOPATH=/home/ubuntu/go
 make build
 make build_darwin
-chown -R ubuntu:ubuntu /home/ubuntu/goshares
 
 # Optional - install IDE
 #apt-get install emacs -y

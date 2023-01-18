@@ -13,12 +13,12 @@ output "ec2_public_ip" {
   value       = module.ec2.public_ip
 }
 
-output "ec2_private_id" {
-  description = "The ID of the instance"
-  value       = module.ec2_private.id
-}
+# output "ec2_private_id" {
+#   description = "The ID of the instance"
+#   value       = module.ec2_private.id
+# }
 
-output "ec2_private_dns" {
+/* output "ec2_private_dns" {
   description = "The private DNS name assigned to the instance. Can only be used inside the Amazon EC2, and only available if you've enabled DNS hostnames for your VPC"
   value       = module.ec2_private.private_dns
-}
+} */

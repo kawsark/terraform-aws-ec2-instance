@@ -43,6 +43,15 @@ module "ec2" {
   user_data                   = templatefile("${path.module}/userdata.sh.tpl", { GO_VERSION = var.go_sdk_version, SSH_KEY = var.ssh_public_key })
   user_data_replace_on_change = true
 
+  root_block_device = [
+    {
+      encrypted   = true
+      volume_type = "gp3"
+      throughput  = 200
+      volume_size = 50
+    },
+  ]
+
   tags = local.tags
 }
 
@@ -54,7 +63,7 @@ resource "aws_volume_attachment" "this" {
 
 resource "aws_ebs_volume" "this" {
   availability_zone = local.availability_zone
-  size              = 1
+  size              = 20
 
   tags = local.tags
 }
@@ -64,7 +73,7 @@ resource "aws_ebs_volume" "this" {
 # EC2 Module - private facing
 ################################################################################
 
-module "ec2_private" {
+/* module "ec2_private" {
   source = "terraform-aws-modules/ec2-instance/aws"
 
   name = local.name_private
@@ -92,4 +101,4 @@ resource "aws_ebs_volume" "ebs_private" {
   size              = 1
 
   tags = local.tags
-}
+} */
